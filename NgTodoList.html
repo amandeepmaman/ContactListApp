@@ -1,0 +1,69 @@
+<!Doctype html>
+<html lang="en" ng-app="firstTodoApp">
+	<head>
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>My First To Do App in Angular</title>
+			<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+			<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+		<style type="text/css">
+			.done{text-decoration: line-through;color: #ccc;}
+			.todoApp{width:400px;}
+			.title{background-color: #f4f4f4;}
+		</style>
+	</head>
+	<body>
+	<div ng-controller="TodoAppController">
+		<div class='container todoApp'>
+			<span class="list-group-item title">First Angular Todo App</span>
+			<ul class="list-group-item">
+				<span>{{remaining()}} of {{Todolist.length}} remaining.</span>
+				<li ng-repeat="Todolist in Todolist"  class="list-group-item titleNoBorder">
+					<input type="checkbox" ng-model="Todolist.done"/>
+					<span ng-class="{'done': Todolist.done}">{{Todolist.title}}</span>
+				</li>
+								<!--preview as typing occurs-->
+				<div class="list-group-item" ng-show="AddNewItem">
+					<input type="checkbox" disabled="true">
+					<input type="text" disabled="true" placeholder='{{AddNewItem}}'/>
+				</div>
+			</ul>
+			<form name="ListForm" class="list-group-item">
+				<input type="text" new="AddNewItem" ng-model="AddNewItem" required/>
+			<!--	<a href="#" class="btn btn-info btn-lg"> -->
+				<button class="btn btn-info" ng-disabled="ListForm.$invalid" ng-click="Addtolist()"><span class="glyphicon glyphicon-plus"></span></button>
+				<button class="btn btn-info" ng-click="DeleteCompleted()"><span class="glyphicon glyphicon-remove"></span></button>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript" src="https://code.angularjs.org/1.4.3/angular.min.js"></script>
+	<script type="text/javascript">
+	angular.module('firstTodoApp', []).
+	controller('TodoAppController', ['$scope', function($scope) {
+		$scope.Todolist = [];
+		$scope.Addtolist = function (){
+			$scope.Todolist.push({'title':$scope.AddNewItem, 'done': false})
+			$scope.AddNewItem = ''
+		};
+		$scope.remaining = function() {
+			var count = 0;
+			angular.forEach($scope.Todolist, function(todo) {
+			 count += !todo.done ? 1 : 0;
+			});
+			return count;
+        };
+		$scope.DeleteCompleted = function () {
+			$scope.Todolist = $scope.Todolist.filter(function(val){
+				return !val.done;
+			})
+		}
+	}])
+	</script>
+
+		 <!--Include jquery-->
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</body>
+</html>
